@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:8080/recipes/
+
+# create new recipe
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "Ham and butter",
+  "ingredients": [
+    {
+      "name": "bread"
+    },{
+      "name": "ham"
+    },{
+      "name": "butter"
+    }
+  ]
+}
+###
+GET {{baseUrl}}
+
+###
+GET {{baseUrl}}ham-and-cheese-toasties
+
+###
+GET {{baseUrl}}ham-and-butter

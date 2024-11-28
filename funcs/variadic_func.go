@@ -1,6 +1,6 @@
 package fuct
 
-func Join(del string, values []string) string {
+func Join(del string, values... string) string {
 	var line string
 	for i, v := range values {
 		line = line + v

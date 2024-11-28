@@ -173,6 +173,27 @@ func (h *RecipesHandler) UpdateRecipe(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+func (h *recipHandlerV2) updateRecipe(w http.ResponseWriter, r *http.Request) {
+	var recipe recipes.Recipe
+	if err := json.NewDecoder(r.Body).Decode(&recipe); err != nil {
+		InternalServerErrorHandler(w, r)
+		return
+	}
+
+	err := recipes.UpdateRecipe(db, recipe)
+	if err != nil {
+		InternalServerErrorHandler(w, r)
+		return
+	}
+	jsonBytes, err := json.Marshal(recipe)
+	if err != nil {
+		NotFoundHandler(w, r)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonBytes)
+}
 func (h *RecipesHandler) DeleteRecipe(w http.ResponseWriter, r *http.Request) {
 	matches := RecipeReWithID.FindStringSubmatch(r.URL.Path)
 	if len(matches) < 2 {
@@ -223,6 +244,9 @@ func (h *recipHandlerV2) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	case r.Method == http.MethodGet && RecipeReWithIDV2.MatchString(r.URL.Path):
 		h.gettRecipe(w, r)
+		return
+	case r.Method == http.MethodPut && RecipeRe.MatchString(r.URL.Path):
+		h.updateRecipe(w, r)
 		return
 	default:
 		return

@@ -58,3 +58,36 @@ func CreateRecipe(db *sql.DB, ingredients []Ingredient, recipeName string) error
 	}
 	return tx.Commit()
 }
+
+func UpdateRecipe(db *sql.DB, recipe Recipe) error {
+    tx, err := db.Begin()
+    if err != nil {
+        return err
+    }
+
+    // Update the recipe
+    _, err = tx.Exec("UPDATE recipe SET name = ? WHERE id = ?", recipe.Name, recipe.Id)
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+
+    // Delete existing ingredients
+    _, err = tx.Exec("DELETE FROM ingredient WHERE recipe_id = ?", recipe.Id)
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+
+    // Insert new ingredients
+    for _, ingredient := range recipe.Ingredients {
+        _, err = tx.Exec("INSERT INTO ingredient (recipe_id, name, amount) VALUES (?, ?, ?)",
+            recipe.Id, ingredient.Name, ingredient.Amount)
+        if err != nil {
+            tx.Rollback()
+            return err
+        }
+    }
+
+    return tx.Commit()
+}

@@ -9,13 +9,34 @@ Content-Type: application/json
   "ingredients": [
     {
       "name": "bread",
-      "amount": 9
+      "amount": 6
     },{
       "name": "ham",
-      "amount": 9
+      "amount": 6
     },{
       "name": "toast",
-      "amount": 9
+      "amount": 6
+    }
+  ]
+}
+
+### create new recipe
+PUT {{baseUrl}}
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "Ham and sausage",
+  "ingredients": [
+    {
+      "name": "bread",
+      "amount": 1
+    },{
+      "name": "ham",
+      "amount": 2
+    },{
+      "name": "sausage",
+      "amount": 3
     }
   ]
 }

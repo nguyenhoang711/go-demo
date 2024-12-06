@@ -3,12 +3,11 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"log"
 	"net/http"
 	"regexp"
 	"strconv"
 
-	"github.com/demo/packer/middlewares"
+	eliminateredudantwork "github.com/demo/packer/eliminate_redudant_work"
 	"github.com/demo/packer/recipes"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gosimple/slug"
@@ -258,25 +257,26 @@ func main() {
 	// var input string
 	// fmt.Scanln(&input)
 	// concurrency.CheckTimeoutWithSelect()
+	eliminateredudantwork.DemoSimpleCaseWithRedudantWork()
 
-	// get a database handle.
-	var err error
-	db, err = sql.Open("mysql", "root:123456@tcp(localhost:3306)/recipes")
-	if err != nil {
-		log.Panic(err)
-	}
+	// // get a database handle.
+	// var err error
+	// db, err = sql.Open("mysql", "root:123456@tcp(localhost:3306)/recipes")
+	// if err != nil {
+	// 	log.Panic(err)
+	// }
 
-	store := recipes.NewMemStore()
-	recipeController := NewRecipesHandler(store)
-	recipeControllerV2 := NewRecipesHandlerV2()
-	mux := http.NewServeMux()
+	// store := recipes.NewMemStore()
+	// recipeController := NewRecipesHandler(store)
+	// recipeControllerV2 := NewRecipesHandlerV2()
+	// mux := http.NewServeMux()
 
-	// create custom handler which implement ServeHTTP
-	mux.Handle("/", &homeHandler{})
-	mux.Handle("/recipes", middlewares.LogTimeRequestMiddleware(middlewares.LogRequestMiddleware(recipeController)))
-	mux.Handle("/recipes/", middlewares.LogTimeRequestMiddleware(middlewares.LogRequestMiddleware(recipeController)))
-	mux.Handle("/recipes-v2", middlewares.LogTimeRequestMiddleware(middlewares.LogRequestMiddleware(recipeControllerV2)))
-	mux.Handle("/recipes-v2/", middlewares.LogTimeRequestMiddleware(middlewares.LogRequestMiddleware(recipeControllerV2)))
-	// start an HTTP server listen on port 8080
-	http.ListenAndServe(":8080", mux)
+	// // create custom handler which implement ServeHTTP
+	// mux.Handle("/", &homeHandler{})
+	// mux.Handle("/recipes", middlewares.LogTimeRequestMiddleware(middlewares.LogRequestMiddleware(recipeController)))
+	// mux.Handle("/recipes/", middlewares.LogTimeRequestMiddleware(middlewares.LogRequestMiddleware(recipeController)))
+	// mux.Handle("/recipes-v2", middlewares.LogTimeRequestMiddleware(middlewares.LogRequestMiddleware(recipeControllerV2)))
+	// mux.Handle("/recipes-v2/", middlewares.LogTimeRequestMiddleware(middlewares.LogRequestMiddleware(recipeControllerV2)))
+	// // start an HTTP server listen on port 8080
+	// http.ListenAndServe(":8080", mux)
 }
